@@ -22,7 +22,7 @@ def instance_data(i):
     vpc_only = ['sourceDestCheck', 'subnet_id', 'vpc_id']
 
     for key in verbatim:
-        v = i.__dict__[key]
+        v = getattr(i, key)
         if v == '' or v == None: # but not False
             continue
         data[key] = v
