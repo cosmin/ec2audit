@@ -42,7 +42,11 @@ def instance_data(i):
     if tags:
         data['tags'] = tags
 
-    return name, data
+    if name != data['id']:
+        data['name'] = name
+        return name + '-' + data['id'], data
+    else:
+        return name, data
 
 def get_ec2_instances(econ):
     instances = NaturalOrderDict()
