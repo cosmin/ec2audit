@@ -16,7 +16,7 @@ def instance_data(i):
     data['zone'] = i.placement
 
     verbatim = ['id', 'image_id', 'architecture', 'instance_type',
-                'launch_time', 'private_ip_address', 'ip_address',
+                'launch_time',
                 'root_device_type', 'state']
 
     vpc_only = ['sourceDestCheck', 'subnet_id', 'vpc_id']
@@ -37,6 +37,17 @@ def instance_data(i):
         data['volumes'] = NaturalOrderDict()
         for dev, vol in i.block_device_mapping.items():
             data['volumes'][dev] = vol.volume_id
+
+    if i.interfaces:
+        data['interfaces'] = NaturalOrderDict()
+        for nic in i.interfaces:
+            ips = {}
+            ips['privateIpAddresses'] = []
+            if hasattr(nic, 'publicIp'):
+                ips['publicIp'] = nic.publicIp
+            for pi_attr in nic.private_ip_addresses:
+                ips['privateIpAddresses'].append([pi_attr.private_ip_address, "Primary = %s" %(pi_attr.primary)])
+            data['interfaces'][nic.id] = ips
 
     name, tags = name_and_tags(i)
     if tags:
