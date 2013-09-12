@@ -94,7 +94,7 @@ def handle_rules(sg, rules):
                 if grant.owner_id != sg.owner_id:
                     fromto.append(dict(name=(grant.owner_id, grant.group_id)))
                 else:
-                    fromto.append(grant.name)
+                    fromto.append(grant.groupId)
 
     for proto, ports in data.items():
         for port in ports:
