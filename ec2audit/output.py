@@ -11,6 +11,9 @@ def to_stdout(data, fmt):
     elif fmt.startswith('p'):
         from pprint import pprint
         pprint(data)
+    elif fmt.startswith('db'):
+        from pprint import pprint
+        pprint(data.values()[0])
 
 def to_dir(data, fmt, output):
     if fmt.startswith('j'):
@@ -25,7 +28,10 @@ def to_dir(data, fmt, output):
         from pprint import pprint
         ext = 'py'
         dump = lambda data, f: pprint(data, f)
-
+    elif fmt.startswith('db'):
+        import json
+        ext = 'db'
+        dump = lambda data, f: json.dump(data[data.keys()[0]], f, indent=4)
     mkdirp(output)
     for dtype, items in data.items():
         base = join(output, dtype)

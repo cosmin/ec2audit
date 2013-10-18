@@ -32,6 +32,9 @@ def instance_data(i):
             data[key] = i.__dict__[key]
 
     data['security_groups'] = sorted([g.name for g in i.groups])
+    data['vpc_id'] = i.vpc_id
+    data['subnet_id'] = i.subnet_id
+    data['instance_type'] = i.instance_type
 
     if i.block_device_mapping:
         data['volumes'] = NaturalOrderDict()
@@ -119,6 +122,8 @@ def sg_data(sg):
     data['inbound'] = handle_rules(sg, sg.rules)
     if sg.rules_egress:
         data['outbound'] = handle_rules(sg, sg.rules_egress)
+    data['name'] = sg.name
+    data['vpc_id'] = sg.vpc_id
     return sg.name, data
 
 def get_ec2_security_groups(ec2):
@@ -127,7 +132,7 @@ def get_ec2_security_groups(ec2):
 def run(params):
     access_key, secret_key = get_aws_credentials(params)
     region = params['<region>']
-    if params['--format'] not in ['j', 'y', 'p', 'json', 'yaml', 'pprint']:
+    if params['--format'] not in ['j', 'y', 'p', 'json', 'yaml', 'pprint', 'db']:
         exit_with_error('Error: format must be one of json or yaml\n')
 
     con = ec2.connect_to_region(region,
