@@ -16,7 +16,7 @@ def instance_data(i):
     data['zone'] = i.placement
 
     verbatim = ['id', 'image_id', 'architecture', 'instance_type',
-                'launch_time',
+                'key_name', 'launch_time',
                 'root_device_type', 'state']
 
     vpc_only = ['sourceDestCheck', 'subnet_id', 'vpc_id']
